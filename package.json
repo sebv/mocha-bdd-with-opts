@@ -1,6 +1,6 @@
 {
   "name": "bdd-with-opts",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A more flexible bdd interface for Mocha ",
   "main": "index.js",
   "scripts": {
