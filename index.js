@@ -2,8 +2,14 @@
  * Module dependencies.
  */
 
-var Mocha = require('mocha')
-  , Suite = Mocha.Suite
+var Mocha;
+if(module.parent){
+  Mocha = module.parent.require('mocha');
+}else{
+  Mocha = window.Mocha;
+}
+
+var Suite = Mocha.Suite
   , Test = Mocha.Test
   , utils = Mocha.utils
   , Args = require('vargs').Constructor;
@@ -159,3 +165,5 @@ module.exports = function(suite){
     };
   });
 };
+
+Mocha.interfaces['bdd-with-opts'] = module.exports;
