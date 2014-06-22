@@ -1,0 +1,24 @@
+{
+  "name": "bdd-with-opts",
+  "version": "0.0.0",
+  "description": "A more flexible bdd interface for Mocha ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sebv/mocha-bdd-with-opts.git"
+  },
+  "keywords": [
+    "mocha",
+    "bdd",
+    "interface"
+  ],
+  "author": "sebv",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sebv/mocha-bdd-with-opts/issues"
+  },
+  "homepage": "https://github.com/sebv/mocha-bdd-with-opts"
+}
