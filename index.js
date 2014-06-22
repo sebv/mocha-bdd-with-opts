@@ -126,7 +126,6 @@ module.exports = function(suite){
       var opts = args.all[1] || {};
       var fn = args.callback;      
       var suite = suites[0];
-      console.log('akaka opts');
       if (suite.pending || opts.pending) var fn = null;
       var test = new Test(title, fn);
       test.file = file;
