@@ -4,7 +4,7 @@
   "description": "A more flexible bdd interface for Mocha ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha test"
   },
   "repository": {
     "type": "git",
@@ -23,5 +23,8 @@
   "homepage": "https://github.com/sebv/mocha-bdd-with-opts",
   "dependencies": {
     "vargs": "^0.1.0"
+  },
+  "devDependencies": {
+    "mocha": "^1.21.4"
   }
 }
