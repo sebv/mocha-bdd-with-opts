@@ -5,8 +5,8 @@ it only supports the pending option, used to skip tests.
 
 [![NPM version](http://img.shields.io/npm/v/bdd-with-opts.svg)](https://npmjs.org/package/bdd-with-opts) 
 [![Downloads](http://img.shields.io/npm/dm/bdd-with-opts.svg)](https://npmjs.org/package/bdd-with-opts)
-[![Dependency Status](https://david-dm.org/sebv/bdd-with-opts.svg)](https://david-dm.org/sebv/bdd-with-opts)
-[![devDependency Status](https://david-dm.org/sebv/bdd-with-opts/dev-status.svg)](https://david-dm.org/sebv/bdd-with-opts#info=devDependencies)
+[![Dependency Status](https://david-dm.org/sebv/mocha-bdd-with-opts.svg)](https://david-dm.org/sebv/mocha-bdd-with-opts)
+[![devDependency Status](https://david-dm.org/sebv/mocha-bdd-with-opts/dev-status.svg)](https://david-dm.org/sebv/mocha-bdd-with-opts#info=devDependencies)
 
 ## Usage
 
