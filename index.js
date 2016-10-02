@@ -1,7 +1,3 @@
-/**
- * Module dependencies.
- */
-
 var Mocha;
 if(module.parent){
   Mocha = module.parent.require('mocha');
@@ -9,6 +5,9 @@ if(module.parent){
   Mocha = window.Mocha;
 }
 
+/**
+ * Module dependencies.
+ */
 var Suite = Mocha.Suite
   , Test = Mocha.Test
   , utils = Mocha.utils
@@ -17,107 +16,82 @@ var Suite = Mocha.Suite
 /**
  * BDD-style interface:
  *
- *      describe('Array', function(){
- *        describe('#indexOf()', {pending: true}, function(){
- *          it('should return -1 when not present', {pending: true} function(){
- *
+ *      describe('Array', function() {
+ *        describe('#indexOf()', function() {
+ *          it('should return -1 when not present', function() {
+ *            // ...
  *          });
  *
- *          it('should return the index when present', function(){
- *
+ *          it('should return the index when present', function() {
+ *            // ...
  *          });
  *        });
  *      });
  *
+ * @param {Suite} suite Root suite.
  */
-
-module.exports = function(suite){
+module.exports = function(suite) {
   var suites = [suite];
 
-  suite.on('pre-require', function(context, file, mocha){
+  suite.on('pre-require', function(context, file, mocha) {
+    var common = require('./common')(suites, context, mocha);
 
-    /**
-     * Execute before running tests.
-     */
-
-    context.before = function(name, fn){
-      suites[0].beforeAll(name, fn);
-    };
-
-    /**
-     * Execute after running tests.
-     */
-
-    context.after = function(name, fn){
-      suites[0].afterAll(name, fn);
-    };
-
-    /**
-     * Execute before each test case.
-     */
-
-    context.beforeEach = function(name, fn){
-      suites[0].beforeEach(name, fn);
-    };
-
-    /**
-     * Execute after each test case.
-     */
-
-    context.afterEach = function(name, fn){
-      suites[0].afterEach(name, fn);
-    };
-
+    context.before = common.before;
+    context.after = common.after;
+    context.beforeEach = common.beforeEach;
+    context.afterEach = common.afterEach;
+    context.run = mocha.options.delay && common.runWithSuite(suite);
     /**
      * Describe a "suite" with the given `title`
      * and callback `fn` containing nested suites
      * and/or tests.
      */
 
-    context.describe = context.context = function(){
+    context.describe = context.context = function() {
       var args = new Args(arguments);
       var title = args.all[0];
       var opts = args.all[1] || {};
       var fn = args.callback;
-      var suite = Suite.create(suites[0], title);
+      suite = common.suite.create({
+        title: title,
+        file: file,
+        fn: fn
+      });
       suite.pending = opts.pending ? true : false;
-      suite.file = file;
-      suites.unshift(suite);
-      fn.call(suite);
-      suites.shift();
-      return suite;
+      return suite
     };
 
     /**
      * Pending describe.
      */
 
-    context.xdescribe =
-    context.xcontext =
-    context.describe.skip = function(){
+    context.xdescribe = context.xcontext = context.describe.skip = function() {
       var args = new Args(arguments);
       var title = args.all[0];
-      var opts = args.all[1] || {};
       var fn = args.callback;
-      var suite = Suite.create(suites[0], title);
-      suite.pending = true;
-      suites.unshift(suite);
-      fn.call(suite);
-      suites.shift();
+      return common.suite.skip({
+        title: title,
+        file: file,
+        fn: fn
+      });
     };
 
     /**
      * Exclusive suite.
      */
 
-    context.describe.only = function(){
+    context.describe.only = function(title, fn) {
       var args = new Args(arguments);
       var title = args.all[0];
       var opts = args.all[1] || {};
       var fn = args.callback;
-      var suite = context.describe(title, opts, fn);
-      mocha.grep(suite.fullTitle());
-      return suite;
+      suite = common.suite.only({
+        title: title,
+        file: file,
+        fn: fn
+      });
+      suite.pending = opts.pending ? true : false;
+      return suite
     };
 
     /**
@@ -126,13 +100,15 @@ module.exports = function(suite){
      * acting as a thunk.
      */
 
-    context.it = context.specify = function(){
+    context.it = context.specify = function(title, fn) {
       var args = new Args(arguments);
       var title = args.all[0];
       var opts = args.all[1] || {};
-      var fn = args.callback;      
+      var fn = args.callback;
       var suite = suites[0];
-      if (suite.pending || opts.pending) var fn = null;
+      if (suite.isPending() || opts.pending) {
+        fn = null;
+      }
       var test = new Test(title, fn);
       test.file = file;
       suite.addTest(test);
@@ -143,27 +119,30 @@ module.exports = function(suite){
      * Exclusive test-case.
      */
 
-    context.it.only = function(){
+    context.it.only = function(title, fn) {
       var args = new Args(arguments);
       var title = args.all[0];
       var opts = args.all[1] || {};
-      var fn = args.callback;      
-      var test = context.it(title, opts, fn);
-      var reString = '^' + utils.escapeRegexp(test.fullTitle()) + '$';
-      mocha.grep(new RegExp(reString));
-      return test;
+      var fn = args.callback;
+      suite = common.test.only(mocha, context.it(title, fn));
+      suite.pending = opts.pending ? true : false;
+      return suite
     };
 
     /**
      * Pending test case.
      */
 
-    context.xit =
-    context.xspecify =
-    context.it.skip = function(title){
+    context.xit = context.xspecify = context.it.skip = function(title) {
       context.it(title);
+    };
+
+    /**
+     * Number of attempts to retry.
+     */
+    context.it.retries = function(n) {
+      context.retries(n);
     };
   });
 };
-
 Mocha.interfaces['bdd-with-opts'] = module.exports;
