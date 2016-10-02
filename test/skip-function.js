@@ -15,8 +15,8 @@ function skipIfBrowserIs(browserToSkip) {
     return ret;
 }
 
-describe('bdd-with-opts', function(){
-  var testCount = 0; 
+describe('bdd-with-opts - skip-function', function(){
+  var testCount = 0;
 
   it('should be skiped', skipIfBrowserIs('firefox'), function(){
     testCount ++;

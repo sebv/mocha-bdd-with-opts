@@ -55,9 +55,9 @@ module.exports = function(suite) {
       suite = common.suite.create({
         title: title,
         file: file,
+        pending: opts.pending ? true : false,
         fn: fn
       });
-      suite.pending = opts.pending ? true : false;
       return suite
     };
 
@@ -90,7 +90,6 @@ module.exports = function(suite) {
         file: file,
         fn: fn
       });
-      suite.pending = opts.pending ? true : false;
       return suite
     };
 

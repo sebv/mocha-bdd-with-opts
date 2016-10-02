@@ -2,8 +2,14 @@
 var assert = require('assert');
 
 /* global describe, it */
-describe('bdd-with-opts', function(){
+describe('bdd-with-opts - basics', function(){
   var testCount = 0;
+  describe('should be skipped', {pending: true}, function(){
+      it('should be skiped', {pending: true}, function(){
+        testCount ++;
+        assert(false);
+      });
+  });
 
   it('should be skiped', {pending: true}, function(){
     testCount ++;
